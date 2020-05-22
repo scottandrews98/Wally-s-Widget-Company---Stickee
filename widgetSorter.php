@@ -93,6 +93,23 @@ function calculateWidgets($widgetsRequired){
         $pickedValue = 0;
     }
 
+    $pickedCount = count($pickedPackets);
+    // Loop through the final array and combine each number with number next to it to see if can be compressed
+    for ($i = 0; $i <= $pickedCount; $i++) {
+        $firstValue = $pickedPackets[$i];
+        $secondValue = $pickedPackets[$i + 1];
+
+        $bothValues = $firstValue + $secondValue;
+        $matchedPosition = array_search($bothValues, $packets, true);
+
+        // If there is a match for both values in the packets array then remove one value and update the other
+        if($matchedPosition){
+            $pickedPackets[$i] = $bothValues;
+            array_splice($pickedPackets, $i + 1, $i + 1);
+        }
+    } 
+
+
     return $pickedPackets;
 }
 ?>

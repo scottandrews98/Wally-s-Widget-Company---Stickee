@@ -77,6 +77,10 @@ function calculateWidgets($widgetsRequired){
                     // Take the smallest value i the array and sets picked value to this so that it doesn't carry the last looped value
                     $pickedValue = $packets[0];
 
+
+                    // Loop through again and pick value with smallest difference to remaining value
+
+
                 }
             }
         }
@@ -93,23 +97,51 @@ function calculateWidgets($widgetsRequired){
         $pickedValue = 0;
     }
 
-    $pickedCount = count($pickedPackets);
-    // Loop through the final array and combine each number with number next to it to see if can be compressed
-    for ($i = 0; $i <= $pickedCount; $i++) {
-        $firstValue = $pickedPackets[$i];
-        $secondValue = $pickedPackets[$i + 1];
+    // $pickedCount = count($pickedPackets);
+    // // Loop through the final array and combine each number with number next to it to see if can be compressed
+    // for ($i = 0; $i <= $pickedCount; $i++) {
+    //     $firstValue = $pickedPackets[$i];
+    //     $secondValue = $pickedPackets[$i + 1];
 
-        $bothValues = $firstValue + $secondValue;
-        $matchedPosition = array_search($bothValues, $packets, true);
+    //     $bothValues = $firstValue + $secondValue;
+    //     $matchedPosition = array_search($bothValues, $packets, true);
 
-        // If there is a match for both values in the packets array then remove one value and update the other
-        if($matchedPosition){
-            $pickedPackets[$i] = $bothValues;
-            array_splice($pickedPackets, $i + 1, $i + 1);
+    //     // If there is a match for both values in the packets array then remove one value and update the other
+    //     if($matchedPosition){
+    //         $pickedPackets[$i] = $bothValues;
+    //         array_splice($pickedPackets, $i + 1, $i + 1);
+    //     }
+    // } 
+
+
+    $matching = true;
+    $deconstructingArray = $pickedPackets;
+    $finalArray = [];
+
+    while($matching){
+        $totalOfArray = array_sum($deconstructingArray);
+        $arrayLengthLeft = count($deconstructingArray);
+
+        // Found a  
+        if(array_search($totalOfArray, $packets, true) != false){
+            // Alter array and remove values
+            $packetsIndex = array_search($totalOfArray, $packets, true);
+            array_push($finalArray, $packets[$packetsIndex]);
+
+            $matching = false;
+        }else if($arrayLengthLeft >= 1){
+            // Value does not exist in the packets so remove 
+            array_push($finalArray, $deconstructingArray[0]);
+            $deconstructingArray = array_shift($deconstructingArray);
+
+        }else{
+            $matching = false;
         }
-    } 
+    }
+    
 
-
-    return $pickedPackets;
+    //return $pickedPackets;
+    return $finalArray;
 }
+
 ?>

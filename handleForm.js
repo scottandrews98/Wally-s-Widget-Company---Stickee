@@ -13,7 +13,7 @@ function calculateWidgets(){
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            console.log(this.responseText);
+            populatePage(JSON.parse(this.responseText))
         }
     };
 
@@ -22,3 +22,12 @@ function calculateWidgets(){
     xhttp.send(params);   
 }
 
+function populatePage(json){
+    document.getElementById('widgetsResult').innerHTML = "";
+
+    for(var i = 0; i < json.length; i++){
+        var individualPackets = "<div>"+ json[i] +"</div>";
+        document.getElementById('widgetsResult').innerHTML += individualPackets;
+    }
+
+}

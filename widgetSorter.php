@@ -4,35 +4,41 @@
 if($_POST['widgets']){
     $totalPackets = calculateWidgets($_POST['widgets']);
 
-    var_dump($totalPackets);
+    echo json_encode($totalPackets);
 }
 
 // Main function for calculating widgets
 function calculateWidgets($widgetsRequired){
     // Array of packets that are avaliable
-    //$packets = [500, 250, 1000, 2000, 5000];    
-    $packets = array(500, 250, 1000, 2000, 5000);
+    $packets = array(250, 500, 1000, 2000, 5000);
+
+    // Sorts array into numerical order just incase a user changes them to not be 
+    sort($packets);
+
+    // Final array for storing the finished order
     $pickedPackets = [];
 
+    // Sets remainder to the final widgets required
     $remainder = $widgetsRequired;
     
     $pickedValue = 0;
 
-    sort($packets);
-
     // Flips the array round to check from biggest to smallest
     $flipPackets = array_reverse($packets);
 
+    // Keeps running until remainder is less than 0
     while($remainder > 0){
 
         // Filters out the odd usecase where instead of 500 x1 it says 250 x 2
         if($remainder < $packets[1] && $remainder > 0){
 
+            // If remainder is less than or equal to the smallest value in packets
             if($remainder <= $packets[0]){
 
                 array_push($pickedPackets, $packets[0]);
                 $remainder = $remainder - $packets[0];
-
+            
+            // Otherwise value is bigger than 250 so needs to be 500 or second biggest total
             }else{
 
                 array_push($pickedPackets, $packets[1]);
@@ -40,21 +46,27 @@ function calculateWidgets($widgetsRequired){
 
             }
 
-        // Calculate what packs to send
+        // Runs when the value remaining is more than the second value (500) 
         }else{
+            // Sets a variable to hold the highest possible deduction 
             $highestDeduction = 0;
+
+            // Runs through each of the packets sizes
             foreach($flipPackets as $packet) {
                 
-                // Calculates the amount of widgets that are remaining to be packed
+                // Calculates the amount of widgets that are remaining to be packed for this particular size
                 $valueLeft = $remainder - $packet;
 
-                if($valueLeft > 0){
+                // If the value calculated is above 0 
+                if($valueLeft > 0){ 
 
+                    // If the packet value is deducting more than the highest value currently saved then replace this value
                     if($packet >= $highestDeduction){
                         $highestDeduction = $packet;
                         $pickedValue = $packet;
                     }
-
+                
+                // Else if the value left completely matches 0
                 }else if($valueLeft === 0){
 
                     $highestDeduction = $packet;

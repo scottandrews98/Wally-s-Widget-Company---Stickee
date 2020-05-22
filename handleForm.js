@@ -1,4 +1,4 @@
-var form = document.getElementById("form");
+var form = document.getElementById("calculate");
 
 // Checks to make sure that form exists on the DOM
 if(form){
@@ -6,7 +6,8 @@ if(form){
 }
 
 function calculateWidgets(){
-    let totalWidgets = document.getElementById("widgetsCount").value();
+    event.preventDefault()
+    let totalWidgets = document.getElementById("widgetsCount").value;
     let params = "widgets="+totalWidgets+"";
 
     var xhttp = new XMLHttpRequest();

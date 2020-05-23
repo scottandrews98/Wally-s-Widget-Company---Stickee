@@ -10,7 +10,7 @@ if($_POST['widgets']){
 // Main function for calculating widgets
 function calculateWidgets($widgetsRequired){
     // Array of packets that are avaliable
-    $packets = array(250, 500, 1000, 2000, 5000);
+    $packets = [250, 500, 1000, 2000, 5000];
 
     // Sorts array into numerical order just incase a user changes them to not be 
     sort($packets);
@@ -77,10 +77,6 @@ function calculateWidgets($widgetsRequired){
                     // Take the smallest value i the array and sets picked value to this so that it doesn't carry the last looped value
                     $pickedValue = $packets[0];
 
-
-                    // Loop through again and pick value with smallest difference to remaining value
-
-
                 }
             }
         }
@@ -97,50 +93,37 @@ function calculateWidgets($widgetsRequired){
         $pickedValue = 0;
     }
 
-    // $pickedCount = count($pickedPackets);
-    // // Loop through the final array and combine each number with number next to it to see if can be compressed
-    // for ($i = 0; $i <= $pickedCount; $i++) {
-    //     $firstValue = $pickedPackets[$i];
-    //     $secondValue = $pickedPackets[$i + 1];
-
-    //     $bothValues = $firstValue + $secondValue;
-    //     $matchedPosition = array_search($bothValues, $packets, true);
-
-    //     // If there is a match for both values in the packets array then remove one value and update the other
-    //     if($matchedPosition){
-    //         $pickedPackets[$i] = $bothValues;
-    //         array_splice($pickedPackets, $i + 1, $i + 1);
-    //     }
-    // } 
-
 
     $matching = true;
     $deconstructingArray = $pickedPackets;
     $finalArray = [];
 
+    // Goes through the final array and checks to see if theres any way to trim it down
     while($matching){
         $totalOfArray = array_sum($deconstructingArray);
         $arrayLengthLeft = count($deconstructingArray);
 
-        // Found a  
+        // Found a match with the total in the final array to the packets
         if(array_search($totalOfArray, $packets, true) != false){
-            // Alter array and remove values
+            // Find match index of packet and then add this to the final array
             $packetsIndex = array_search($totalOfArray, $packets, true);
             array_push($finalArray, $packets[$packetsIndex]);
 
+            // Found a whole match so the while loop stops
             $matching = false;
+
         }else if($arrayLengthLeft >= 1){
-            // Value does not exist in the packets so remove 
+            // Value does not exist in the packets so remove first index and add this value to the final array
             array_push($finalArray, $deconstructingArray[0]);
-            $deconstructingArray = array_shift($deconstructingArray);
+            
+            // Remove first value from array
+            array_shift($deconstructingArray);
 
         }else{
             $matching = false;
         }
     }
     
-
-    //return $pickedPackets;
     return $finalArray;
 }
 
